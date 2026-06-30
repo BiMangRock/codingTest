@@ -1,87 +1,48 @@
-import javax.security.auth.callback.CallbackHandler;
 import java.util.*;
 
 public class Main {
     public static void main(String[] args) {
-//
-//        String s="12345";
-//        System.out.println(s.substring(1,3));
-
         // 테스트 케이스 1
-        String s1 = "[](){}";
-        int result1 = solution(s1);
-        System.out.println("테스트 케이스 1 결과: " + result1); // 예상 출력: 3
+        int n1 = 7;
+        int k1 = 3;
+        int[] result1 = solution(n1, k1);
+        System.out.println("테스트 케이스 1 결과: " + Arrays.toString(result1)); // 예상 출력: [3, 6, 2, 7, 5, 1, 4]
 
         // 테스트 케이스 2
-        String s2 = "}()[]{";
-        int result2 = solution(s2);
-        System.out.println("테스트 케이스 2 결과: " + result2); // 예상 출력: 2
+        int n2 = 5;
+        int k2 = 2;
+        int[] result2 = solution(n2, k2);
+        System.out.println("테스트 케이스 2 결과: " + Arrays.toString(result2)); // 예상 출력: [2, 4, 1, 5, 3]
     }
 
-
-    public static int solution(String s) {
-        String subString;
-        int count=0;
-        for (int i = 0; i < s.length(); i++) { //이거 경곗갑 ㅅ설정 왜 이렇게 해야하는거지
-            subString=s.substring(i,s.length())+s.substring(0,i); //포함여부 -1인가//i부터 시작이 있으니 끝부분인 i가 포함되면 두번 포함되는건가
-            //1234
-//            System.out.println("i는"+i+"subSting:"+subString);
-            if(isRepeat(subString)){
-                count++;
-            }
+    public static int[] solution(int n, int k) {
+        //근데 큐로하면, 이게 스케쥴링이랑 다르게, 1번이 계속 1번이어야하는데 그냥 arraylist쓰면 안되나
+        //<다음 동작이 다시 처음으로 돌아가는게 아니구나
+        ArrayDeque<Integer> queue=new ArrayDeque<>();
+        int[] arr=new int[n];
+        for (int i = 1; i <=n ; i++) {
+            queue.add(i);
         }
-        return count;
-    }
-    public static boolean isRepeat(String s){
-        System.out.println("==========현재의 subString:"+s+"===============");
-        ArrayDeque<Character> stack=new ArrayDeque<>();
+        int index=0;
+        int copiedK=k;
+        while (!queue.isEmpty()){
 
-        for (int i = 0; i < s.length(); i++) {
+            copiedK--;
+            int poppedNumber=queue.pollFirst();
 
-            Character outSideC=s.charAt(i);
-            System.out.println("i는"+i+"stack:"+stack);
-
-//            System.out.println("현재의 c:"+outSideC);
-            if(stack.isEmpty()){
-                if(outSideC==']' || outSideC=='}' || outSideC==')'){
-                    System.out.println("!!");
-                    return false;
-                }
-                stack.push(outSideC);
+            if(copiedK==0){
+                arr[index]=poppedNumber;
+                index++;
+                copiedK=k;
             }
-
-
             else{
-                //6가지 분기점을 만드어야하나
-                Character insideStackC=stack.peek();
-                if(insideStackC=='[' && outSideC==']' ||      insideStackC=='{' && outSideC=='}' || insideStackC=='(' && outSideC==')' ){
-                    stack.pop();
-                }
-
-
-
-                else{
-                    if(outSideC=='[' || outSideC=='{' || outSideC=='('){
-                        stack.push(outSideC);
-                    }
-                    else{
-                        System.out.println("!");
-                        return false;
-                    }
-                }
+                queue.add(poppedNumber);
             }
-        }
-        System.out.println("현재의 스택:"+stack);
-        if(stack.isEmpty()){
-            System.out.println("true");
-            return true;
-        }
-        else{
-            System.out.println("false");
-            return  false;
+
+
         }
 
+
+        return arr;
     }
 }
-//왜 회전 횟수는 n-1인거지
-//반복문 만들어서 매번 substring만들고 알맞는 문자라면 ++시키는 형식으로 하는가

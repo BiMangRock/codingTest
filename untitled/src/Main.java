@@ -19,7 +19,7 @@ public class Main {
         // TODO: 이 메소드를 완성하세요.
 
         ArrayDeque<IndexAndValue> queue=new ArrayDeque<>();
-        PriorityQueue<IndexAndValue> priorityQueue=new PriorityQueue<>();
+        PriorityQueue<IndexAndValue> priorityQueue=new PriorityQueue<>(Comparator.reverseOrder()); //기본적으로 민힙이라서 ??<<<<<<<<첫번째
 
         for (int i = 0; i < priorities.length; i++) {
             IndexAndValue indexAndValue=new IndexAndValue(i,priorities[i]);
@@ -29,23 +29,45 @@ public class Main {
         }
 
         int order=1;
-        //이러면 뭐가 큰지 compareto로 넘겨줘야하나 오버라이딩을 해줘야하나 ????
+        //이러면 뭐가 큰지 compareto로 넘겨줘야하나 오버라이딩을 해줘야하나 ????<<<<<<<<두번쨰
+//        System.out.println("queue"+queue);
+//        System.out.println("priorityQueue"+priorityQueue);
 
         while (!queue.isEmpty() && !priorityQueue.isEmpty()){
+//            System.out.println("==================");
             IndexAndValue indexAndValue=queue.pollFirst();
+
+//            System.out.println("queue에서 뽑힌 녀석:"+indexAndValue);
             IndexAndValue maxIndexAndValue=priorityQueue.peek();
+
+
             //equals해야하나 아미녀 equlato도 오버라이딩을 해야하나, 두 멤버변수가 같으면 같도록 ?
             if(indexAndValue.equals(maxIndexAndValue)){
+//
+//                System.out.println("queue"+queue);
+//                System.out.println("priorityQueue"+priorityQueue);
                 priorityQueue.poll();
+
+//                System.out.println("큐에서 제거후");
+//                System.out.println("queue"+queue);
+//                System.out.println("priorityQueue"+priorityQueue);
                 if(indexAndValue.index==location){
                     return order;
                 }
+                order++;
             }
             else{
+//                System.out.println("queue"+queue);
+//                System.out.println("priorityQueue"+priorityQueue);
+
                 queue.add(indexAndValue);
+
+//                System.out.println("다시 큐에 추가 ");
+//                System.out.println("queue"+queue);
+//                System.out.println("priorityQueue"+priorityQueue);
             }
 
-            order++;
+//            order++;<<<<<<<<<<<세번쨰 여기있으면 안되고
 
         }
         //자료구조를 리스트랑 큐 두개로 하지않고 하는방법없나
@@ -73,6 +95,11 @@ class IndexAndValue implements Comparable<IndexAndValue>{
     @Override
     public int compareTo(IndexAndValue other) {
         return this.value-other.value;
+    }
+
+    @Override
+    public String toString() {
+        return String.format("(index:%d, value: %d)", index,value);
     }
 }
 

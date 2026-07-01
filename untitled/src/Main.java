@@ -2,88 +2,66 @@ import java.util.*;
 
 public class Main {
     public static void main(String[] args) {
-        // 테스트 케이스 1
-        int k1 = 3;
-        int n1 = 7;
-        List<List<Integer>> result1 = solution(k1, n1);
+        // 테스트 케이스 1: 원소가 1개일 때
+        int[] nums1 = {7};
+        List<List<Integer>> result1 = solution(nums1);
         System.out.println("테스트 케이스 1 결과: " + result1);
-        // 예상 출력: [[1, 2, 4]]
+        // 예상 출력: [[], [7]] (출력 순서는 다를 수 있음)
 
-        // 테스트 케이스 2
-        int k2 = 3;
-        int n2 = 9;
-        List<List<Integer>> result2 = solution(k2, n2);
+        // 테스트 케이스 2: 원소가 2개일 때
+        int[] nums2 = {4, 5};
+        List<List<Integer>> result2 = solution(nums2);
         System.out.println("테스트 케이스 2 결과: " + result2);
-        // 예상 출력: [[1, 2, 6], [1, 3, 5], [2, 3, 4]]
+        // 예상 출력: [[], [4], [5], [4, 5]] (출력 순서는 다를 수 있음)
+
+        // 테스트 케이스 3: 원소가 3개일 때 (가장 일반적인 경우)
+        int[] nums3 = {1, 2, 3};
+        List<List<Integer>> result3 = solution(nums3);
+        System.out.println("테스트 케이스 3 결과: " + result3);
+        // 예상 출력: [[], [1], [2], [3], [1, 2], [1, 3], [2, 3], [1, 2, 3]] (출력 순서는 다를 수 있음)
     }
 
-    public static List<List<Integer>> solution(int k, int n) {
-        List<List<Integer>> result = new ArrayList<>(); //이런것도 주지말라고 <<<<<<<<<<
+    public static List<List<Integer>> solution(int[] nums) {
+        // 이곳에 알맞은 리스트를 선언하고 재귀(백트래킹) 함수를 시작하세요.
+        List<List<Integer>> outerList=new ArrayList<>();
         List<Integer> innerList=new ArrayList<>();
-        //이차원 형태의 리스트이면 안쪽 리스트 생성은 언제 해야하는거지
-        f(result,innerList,0,0,k,n);
-        return result;
+        int repeatNum=0;
+        f(outerList,innerList,nums,0,repeatNum);
+        return outerList;
     }
 
-    //갯수 영어로\
-    //관련 문제<<<<<주솟값 공유문제
-    private static void f(List<List<Integer>> result,List<Integer> innerList,int sum,int nowNum,int limit,int sumLimit){
-//        System.out.println("list:"+innerList+"  listSize"+innerList.size()+"  limit"+limit+"   sum"+sum+"    sumLimit"+sumLimit);
-//        System.out.println("전체 list의상태 :"+result+"   innerREsult"+innerList);
+//이미 있는건 어케 확인하지, 추가 배열로 확인하기에는 nums의 크기가 커지면 힘들어지는데
+//    /사전으로 해당 값들넣어두는것도 그렇고
 
 
-        if(sum==sumLimit && innerList.size()==limit){
-            ArrayList<Integer> temp=new ArrayList<>();
+    private static void f(List<List<Integer>> outerList,List<Integer> innerList,int[] arr,int index,int repeatNum){
+        //종료조건은<<<<<<<<
+        if(repeatNum>arr.length){
+            List<Integer> temp=new ArrayList<>();
             for (int i = 0; i < innerList.size(); i++) {
                 temp.add(innerList.get(i));
             }
-            result.add(temp);
-
-
-
-        }
-        else if(sum>sumLimit){
-            //이거 innerList의 주소공유문제 해결하려면 객체를 생성해야하는데 이 객체 생성의 시점이 언제가 되어야하는거지 ?
-            return;//이러면 재귀만 멈추는거잖아
-        }
-
-        if(innerList.size()>limit){
+            outerList.add(temp);
             return;
+
         }
-        //잘못된 경우에는 리스트 객체 새로 생성하면 안되겟지 ?
 
-        //미로찾기가 그랫듯이, 재귀안에서 반복문이 피료하던가
-        for (int i = nowNum+1; i <=9 ; i++) {//이거 경곗값 부분<<<<<<<<<<<<<<<<
+        for (int i = index; i <arr.length ; i++) {
+//            System.out.println("i는"+i);
 
-            innerList.add(i);
-            sum+=i;
+            f(outerList,innerList,arr,index,repeatNum+1);
+            //만약 리스트의 크기가 5로 정해져있었더라면 더 쉬웠을까나
+            //이거 순서대로 하거나 순열처럼 2,3 3,2다르게 하ㅁ려면 visited필요하다고 햇던가
 
-            nowNum=i;
-            f(result, innerList, sum, nowNum,limit,sumLimit);
-
-            sum-=i;
+            innerList.add(arr[i]);
+            f(outerList,innerList,arr,index+1,repeatNum+1);
             innerList.remove(innerList.size()-1);
-
         }
-
-
-
-
-
-
-
-
 
     }
+
+
 }
-
-
-
-
-
-
-
-
-
-
-
+//이전 합 구하기 문제와 달리 특정 합(sumLimit)이나 개수(limit) 제한이 없습니다. 즉, 재귀 함수가 호출될 때마다 현재 innerList 상태의 복사본을 무조건 result에 추가하고 탐색을 계속하면 됩니다.
+//<뭔소리지 아 걍 이건 np문제에서 무조건 다 돌아봐야한다는 그뜻인가
+//근데 그러면 재귀마다 추가하는건 아니잖아, 그러면 중복 아닌가 <어떤 분기점 있어야하지않나

@@ -25,8 +25,8 @@ public class Main {
         // 이곳에 알맞은 리스트를 선언하고 재귀(백트래킹) 함수를 시작하세요.
         List<List<Integer>> outerList=new ArrayList<>();
         List<Integer> innerList=new ArrayList<>();
-        int repeatNum=0;
-        f(outerList,innerList,nums,0,repeatNum);
+//        int repeatNum=0;
+        f(outerList,innerList,nums,0);
         return outerList;
     }
 
@@ -34,27 +34,25 @@ public class Main {
 //    /사전으로 해당 값들넣어두는것도 그렇고
 
 
-    private static void f(List<List<Integer>> outerList,List<Integer> innerList,int[] arr,int index,int repeatNum){
-        //종료조건은<<<<<<<<
-        if(repeatNum>arr.length){
-            List<Integer> temp=new ArrayList<>();
+    private static void f(List<List<Integer>> outerList,List<Integer> innerList,int[] arr,int index){
+        //종료조건은<<<<<<<<반복문이 있으니깐 멈추게 되나 <<<<
+        //근데 if로 분기점을 만들어야지 result <<외부반복문에 넣을타이밍이 생기는데 <<<<
+        if(index>arr.length-1){
+            //이러면 빈리스트나 리스트보다 크기가 작은건 캐치를 못하는데 그리고 뭔가 이상한데
+
+            ArrayList<Integer> temp=new ArrayList<>();
             for (int i = 0; i < innerList.size(); i++) {
                 temp.add(innerList.get(i));
             }
             outerList.add(temp);
-            return;
-
         }
 
         for (int i = index; i <arr.length ; i++) {
-//            System.out.println("i는"+i);
 
-            f(outerList,innerList,arr,index,repeatNum+1);
-            //만약 리스트의 크기가 5로 정해져있었더라면 더 쉬웠을까나
-            //이거 순서대로 하거나 순열처럼 2,3 3,2다르게 하ㅁ려면 visited필요하다고 햇던가
 
             innerList.add(arr[i]);
-            f(outerList,innerList,arr,index+1,repeatNum+1);
+            f(outerList,innerList,arr,index+1);
+
             innerList.remove(innerList.size()-1);
         }
 

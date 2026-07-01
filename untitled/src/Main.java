@@ -25,27 +25,22 @@ public class Main {
         return result;
     }
 
-    //갯수 영어로
+    //갯수 영어로\
+    //관련 문제<<<<<주솟값 공유문제
     private static void f(List<List<Integer>> result,List<Integer> innerList,int sum,int nowNum,int limit,int sumLimit){
 //        System.out.println("list:"+innerList+"  listSize"+innerList.size()+"  limit"+limit+"   sum"+sum+"    sumLimit"+sumLimit);
-        System.out.println("전체 list의상태 :"+result+"   innerREsult"+innerList);
+//        System.out.println("전체 list의상태 :"+result+"   innerREsult"+innerList);
+
+
         if(sum==sumLimit && innerList.size()==limit){
-
-            System.out.println("####################################################");
-            System.out.println("전체 list"+result+"      innerList"+innerList);
-
-
-            result.add(innerList);
-            innerList=new ArrayList<>(); //이러면 기존 리스트 안바뀌나
-            innerList.add(9999);
-            innerList.add(9999888);
+            ArrayList<Integer> temp=new ArrayList<>();
+            for (int i = 0; i < innerList.size(); i++) {
+                temp.add(innerList.get(i));
+            }
+            result.add(temp);
 
 
 
-            System.out.println("새로운 객체 생성ㄹ후 전체 list"+result+"      innerList"+innerList);
-            //참조의 대상이 바뀌는거겟지 ?
-
-            return;
         }
         else if(sum>sumLimit){
             //이거 innerList의 주소공유문제 해결하려면 객체를 생성해야하는데 이 객체 생성의 시점이 언제가 되어야하는거지 ?

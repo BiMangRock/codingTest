@@ -33,7 +33,18 @@ public class Main {
 //        int[] canGoY={0,0,1,-1};
         //이건 굳이 매개변수로 넘겨주지말고 ?
 
-        return f(list,board,visited,0,0,word);
+//        ArrayList<Boolean> booleanArrayList=new ArrayList<>();
+//
+        for (int i = 0; i < board.length; i++) {
+            for (int j = 0; j < board[0].length; j++) {
+                if( f(list,board,visited,i,j,word)){
+                    return true;
+                }
+            }
+        }
+
+        return false;
+
     }
     private static boolean f(List<Character> list,char[][] board,boolean[][] visited,int nowRowIndex,int nowColIndex,String s){
 
@@ -64,7 +75,7 @@ public class Main {
         /// ////////////////
 
         for (int i = 0; i < canGoCol.length; i++) {
-            for (int j = 0; j < canGoRow.length; j++) {
+
 
                 int row=nowRowIndex+canGoRow[i];
                 int col=nowColIndex+canGoCol[i];
@@ -75,6 +86,18 @@ public class Main {
                 //조건 'row<0'은(는) 항상 'false'입니다. <<왜지
 
                 char nowC=board[row][col];
+                int index=list.size();
+
+//                if(s.charAt(index+1)!=nowC){
+//                    continue;
+//                }
+            for (int j = 0; j <list.size() ; j++) {
+                if(list.get(i)!=s.charAt(i)){
+                    return false;//?
+                }
+            }
+
+
                 System.out.println("현재의 char: "+nowC+"    현재의 list: "+list);
 
                 list.add(nowC);
@@ -86,7 +109,7 @@ public class Main {
 
                 visited[row][col]=false;
                 list.remove(list.size()-1);
-            }
+
         }
 
 

@@ -15,89 +15,106 @@ class Solution {
         };
         System.out.println("예시 1 결과: "+sol.solution(arr1));
 
-        // 예시 2
-        int[][] arr2 = {
-                {1, 0, 1},
-                {1, 0, 1},
-                {1, 0, 1}
-        };
-
-        System.out.println("예시 2 결과: " + sol.solution(arr2));
-
-        // 예시 3
-        int[][] arr3 = {
-                {1, 1},
-                {1, 1}
-        };
-
-        //왜되냐 ??
-        System.out.println("예시 3 결과: " + sol.solution(arr3));
+//        // 예시 2
+//        int[][] arr2 = {
+//                {1, 0, 1},
+//                {1, 0, 1},
+//                {1, 0, 1}
+//        };
+//
+//        System.out.println("예시 2 결과: " + sol.solution(arr2));
+//
+//        // 예시 3
+//        int[][] arr3 = {
+//                {1, 1},
+//                {1, 1}
+//        };
+//
+//        //왜되냐 ??
+//        System.out.println("예시 3 결과: " + sol.solution(arr3));
     }
 
     public int solution(int[][] arr) {
+        //visited만 쓰는 버전 ㅁ
         int r=arr.length;
         int c=arr[0].length;
-        boolean[][] visited=new boolean[r][c];//근데 이 visited배열은, 이게 루프끝나면 다시 false로 바뀌지 않던가
-        //기존 배열인 arr에서 석유있는부분을 0으로 수정해야하나
 
-        //시작점은 어케 해야하지 ??
-//        int startR=0;
-//        int startC=0;
-
+        boolean[][] visited=new boolean[r][c];
         int sum=0;
-        //근데 이러면 모든 격자판을 다 살피는 꼴이 되잖아
-        for (int i = 0; i < r; i++) {
-            for (int j = 0; j < c; j++) {
-                if(arr[i][j]==0){
+
+        for(int i=0; i<arr.length; i++){
+            for(int j=0; j<arr[0].length; j++){
+                if(visited[i][j] || arr[i][j]==0){
                     continue;
                 }
                 else{
+                    System.out.println("===============");
+                    System.out.println(String.format("현재의 좌표:(%d,%d)", i,j));
+                    printArr(visited);
+
                     f(i,j,visited,arr);
+                    System.out.println("===============");
                     sum++;
                 }
+
+
             }
         }
         return sum;
+
     }
-    //중첩되서 안세아리게 하려면 어케 해야하지
-    //각 열마다 dfs를 할필요는없이, 이미 발견한 석유는 뭔가 라벨을 따로 붙여서 관리하면 되지않나
 
 
-    //boolean return하지 않도록 해도되나
+
+
     private void f(int r,int c,boolean[][] visited, int[][] arr){
+
         int[] moveR={0,0,-1,1};
-        int[] moveC={-1,1,0,0};
-        int R=arr.length-1;
-        int C=arr[0].length-1;
-        for(int i=0; i<moveC.length; i++){
+        int[] moveC={1,-1,0,0};
+        int limitR=arr.length-1;
+        int limitC=arr[0].length-1;
+
+        for (int i = 0; i <moveC.length ; i++) {
             int newR=moveR[i]+r;
             int newC=moveC[i]+c;
-            if(newR<0 || newR>R || newC<0 || newC>C){
+
+//            System.out.println(String.format("현재의 좌표:(%d,%d)",newR,newC ));
+
+            if(newR<0 || newR>limitR || newC<0 || newC>limitC){
                 continue;
             }
+            //원본 수정하지않는방식이라도 1인지 확인은 해야하는거겟지 >
             if(!visited[newR][newC] && arr[newR][newC]==1){
-                //근데 그러면 뭐 연결되어있으면 처리는 어케 하지
+                System.out.println(String.format("현재의 좌표:(%d,%d)는 방문되지않았고, 석유가 있으니깐 재귀로 들어감",newR,newC ));
+                printArr(visited);
                 visited[newR][newC]=true;
+
                 f(newR,newC,visited,arr);
-                arr[newR][newC]=0;
-                visited[newR][newC]=false;
             }
         }
 
-        //그래서 크기 더해주는건 어케 함
-
-
 
     }
+    private void printArr(boolean[][] arr){
+        System.out.println("현재의 visited 상태(O는 방문함):");
+        for (int i = 0; i < arr.length; i++) {
+            for (int j = 0; j <arr[i].length ; j++) {
+                if(arr[i][j]){
+                    System.out.print("0 ");
+                }
+                else{
+                    System.out.print("x ");
+                }
+//                System.out.print(arr[i][j]+" ");
+            }
+            System.out.println();
+        }
+    }
 
-//    private boolean isValid(int r,int c,int limitR,int limitC){
-//
-//    }
+
 
 }
 
-
-//이 땅속에 존재하는 석유 덩어리의 총 개수를 구하는 프로그램을 작성하세요.
 
 
 
